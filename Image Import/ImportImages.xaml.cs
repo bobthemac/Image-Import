@@ -25,7 +25,7 @@ namespace Image_Import
         public MainWindow()
         {
             InitializeComponent();
-
+            GetMediaDrive();
         }
 
         private void GetMediaDrive()
