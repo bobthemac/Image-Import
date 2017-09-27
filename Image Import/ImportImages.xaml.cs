@@ -22,7 +22,8 @@ namespace Image_Import
     /// </summary>
     public partial class MainWindow : Window
     {
-        private List<DriveInfo> drives;
+        private List<DriveInfo> drives = new List<DriveInfo>();
+   
         public MainWindow()
         {
             InitializeComponent();
@@ -46,7 +47,7 @@ namespace Image_Import
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Hello");
+            MessageBox.Show(comboBox.Text);
         }
 
         private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
