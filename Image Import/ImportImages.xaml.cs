@@ -39,6 +39,7 @@ namespace Image_Import
                     comboBox.Items.Add(drive.Name);
                 }
             }
+            comboBox.SelectedIndex = 0;
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
