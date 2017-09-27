@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using System.IO;
+
 namespace Image_Import
 {
     /// <summary>
@@ -23,11 +25,30 @@ namespace Image_Import
         public MainWindow()
         {
             InitializeComponent();
+
+        }
+
+        private void GetMediaDrive()
+        {
+            var driveList = DriveInfo.GetDrives();
+
+            foreach (DriveInfo drive in driveList)
+            {
+                if (drive.DriveType == DriveType.Removable)
+                {
+                    comboBox.Items.Add(drive.Name);
+                }
+            }
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Hello");
+        }
+
+        private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }
