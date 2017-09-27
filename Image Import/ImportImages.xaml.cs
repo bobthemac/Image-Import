@@ -22,6 +22,7 @@ namespace Image_Import
     /// </summary>
     public partial class MainWindow : Window
     {
+        private List<DriveInfo> drives;
         public MainWindow()
         {
             InitializeComponent();
@@ -30,13 +31,14 @@ namespace Image_Import
 
         private void GetMediaDrive()
         {
-            var driveList = DriveInfo.GetDrives();
+            DriveInfo[] driveList = DriveInfo.GetDrives();
 
             foreach (DriveInfo drive in driveList)
             {
                 if (drive.DriveType == DriveType.Removable)
                 {
                     comboBox.Items.Add(drive.Name);
+                    drives.Add(drive);
                 }
             }
             comboBox.SelectedIndex = 0;
