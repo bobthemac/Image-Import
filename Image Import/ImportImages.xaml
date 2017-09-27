@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Image_Import"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Image Importer" Height="350" Width="525">
     <Grid>
         <ComboBox x:Name="comboBox" HorizontalAlignment="Left" Margin="117,14,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.517,-1.544"/>
         <Label x:Name="label" Content="Select Flash Drive" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="button" Content="Import" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="227"/>
+        <Button x:Name="button" Content="Import" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="227" Click="button_Click"/>
 
     </Grid>
 </Window>
