@@ -56,7 +56,8 @@ namespace Image_Import
             DateTime created; // File.GetCreatedTime
 
             DirectoryInfo dirInfo = new DirectoryInfo(pathBox.Text);
-            FileInfo[] files = dirInfo.GetFiles("*.*");
+            FileInfo[] files = dirInfo.GetFiles("*.*", SearchOption.AllDirectories);
+
             foreach(FileInfo fi in files)
             {
                 Console.WriteLine("{0}", fi.CreationTime);
