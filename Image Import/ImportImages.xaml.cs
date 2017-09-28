@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using System.IO;
+using System.Windows.Forms;
 
 namespace Image_Import
 {
@@ -51,6 +52,18 @@ namespace Image_Import
         }
 
         private void LocationClick(object sender, RoutedEventArgs e)
+        {
+            string folderPath = "";
+            FolderBrowserDialog dialogFolder = new FolderBrowserDialog();
+
+            if (dialogFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                folderPath = dialogFolder.SelectedPath;
+            }
+            pathBox.Text = folderPath;
+        }
+
+        private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
