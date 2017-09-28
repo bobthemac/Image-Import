@@ -38,19 +38,19 @@ namespace Image_Import
             {
                 if (drive.DriveType == DriveType.Removable)
                 {
-                    comboBox.Items.Add(drive.Name);
+                    driveCombo.Items.Add(drive.Name);
                     drives.Add(drive);
                 }
             }
-            comboBox.SelectedIndex = 0;
+            driveCombo.SelectedIndex = 0;
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        private void ImportClick(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(comboBox.Text);
+
         }
 
-        private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LocationClick(object sender, RoutedEventArgs e)
         {
 
         }
