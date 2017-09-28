@@ -46,6 +46,16 @@ namespace Image_Import
             driveCombo.SelectedIndex = 0;
         }
 
+        private void GetFiles()
+        {
+
+        }
+
+        private void CreateFolder()
+        {
+
+        }
+        
         private void ImportClick(object sender, RoutedEventArgs e)
         {
 
