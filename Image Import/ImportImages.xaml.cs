@@ -53,12 +53,19 @@ namespace Image_Import
 
         private void CreateFolder()
         {
+            DateTime created; // File.GetCreatedTime
 
+            DirectoryInfo dirInfo = new DirectoryInfo(pathBox.Text);
+            FileInfo[] files = dirInfo.GetFiles("*.*");
+            foreach(FileInfo fi in files)
+            {
+                Console.WriteLine("{0}", fi.CreationTime);
+            }
         }
         
         private void ImportClick(object sender, RoutedEventArgs e)
         {
-
+            CreateFolder();
         }
 
         private void LocationClick(object sender, RoutedEventArgs e)
