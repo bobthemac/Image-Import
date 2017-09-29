@@ -49,6 +49,7 @@ namespace Image_Import
 
         private void GetFiles()
         {
+            DirectoryInfo importDir = new DirectoryInfo(pathBox.Text);
             DirectoryInfo copyDir = new DirectoryInfo(driveCombo.Text);
             FileInfo[] copyFiles = copyDir.GetFiles("*.*", SearchOption.AllDirectories);
 
@@ -57,17 +58,17 @@ namespace Image_Import
             foreach(FileInfo fi in copyFiles)
             {
                 string dateMatch = fi.CreationTime.ToString("yyyy_MM_dd");
-                Console.WriteLine(fi.Name.ToString());
 
-                string copyPath = pathBox.Text + "\\" + dateMatch;
-                Console.WriteLine(copyPath);
-                DirectoryInfo[] dirs = copyDir.GetDirectories();
+                string copyPath = System.IO.Path.Combine(pathBox.Text, dateMatch, fi.Name.ToString());
+
+                DirectoryInfo[] dirs = importDir.GetDirectories();
                 foreach(DirectoryInfo di in dirs)
                 {
-                    if(di.CreationTime.ToString("yyyy_MM_dd") == dateMatch)
+                    Console.WriteLine(di.Name.ToString() + " | " + dateMatch);
+                    if (di.Name.ToString() == dateMatch)
                     {
-                        Console.WriteLine("Copying: " + fi.ToString());
-                        fi.CopyTo(System.IO.Path.Combine(copyPath, fi.Name.ToString()), false);
+                        Console.WriteLine("Copying: " + copyPath);
+                        fi.CopyTo(copyPath, false);
                     }
                 }
             }
