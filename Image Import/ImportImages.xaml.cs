@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 
 using System.IO;
 using System.Windows.Forms;
+using System.Collections;
 
 namespace Image_Import
 {
@@ -53,14 +54,26 @@ namespace Image_Import
 
         private void CreateFolder()
         {
-            DateTime created; // File.GetCreatedTime
+            Hashtable created = new Hashtable();// File.GetCreatedTime
 
             DirectoryInfo dirInfo = new DirectoryInfo(pathBox.Text);
             FileInfo[] files = dirInfo.GetFiles("*.*", SearchOption.AllDirectories);
 
             foreach(FileInfo fi in files)
             {
-                Console.WriteLine("{0}", fi.CreationTime);
+                string dateStr = fi.CreationTime.ToString("yyyy_MM_dd"); //YYYY_MM_DD
+                try
+                {
+                    created.Add(dateStr, true);
+                }catch
+                {
+                    Console.WriteLine("Duplicate Catch");
+                }
+            }
+
+            foreach(DictionaryEntry h in created)
+            {
+                Console.WriteLine("{0}", h.Key);
             }
         }
         
