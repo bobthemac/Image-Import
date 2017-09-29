@@ -49,7 +49,28 @@ namespace Image_Import
 
         private void GetFiles()
         {
+            DirectoryInfo copyDir = new DirectoryInfo(driveCombo.Text);
+            FileInfo[] copyFiles = copyDir.GetFiles("*.*", SearchOption.AllDirectories);
 
+            //FileInfo fi;
+
+            foreach(FileInfo fi in copyFiles)
+            {
+                string dateMatch = fi.CreationTime.ToString("yyyy_MM_dd");
+                Console.WriteLine(fi.Name.ToString());
+
+                string copyPath = pathBox.Text + "\\" + dateMatch;
+                Console.WriteLine(copyPath);
+                DirectoryInfo[] dirs = copyDir.GetDirectories();
+                foreach(DirectoryInfo di in dirs)
+                {
+                    if(di.CreationTime.ToString("yyyy_MM_dd") == dateMatch)
+                    {
+                        Console.WriteLine("Copying: " + fi.ToString());
+                        fi.CopyTo(System.IO.Path.Combine(copyPath, fi.Name.ToString()), false);
+                    }
+                }
+            }
         }
 
         private Hashtable GetFolderNames()
@@ -71,13 +92,11 @@ namespace Image_Import
                     Console.WriteLine("Duplicate Catch");
                 }
             }
-
             return created;
         }
 
         private void CreateFolder()
         {
- 
             DirectoryInfo importLocal = new DirectoryInfo(pathBox.Text);
             foreach(DictionaryEntry h in GetFolderNames())
             {
@@ -88,6 +107,7 @@ namespace Image_Import
         private void ImportClick(object sender, RoutedEventArgs e)
         {
             CreateFolder();
+            GetFiles();
         }
 
         private void LocationClick(object sender, RoutedEventArgs e)
