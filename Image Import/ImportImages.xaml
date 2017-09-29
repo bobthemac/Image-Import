@@ -5,14 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Image_Import"
         mc:Ignorable="d"
-        Title="Image Importer" Height="350" Width="525">
+        Title="Image Importer" Height="155" Width="320" ResizeMode="NoResize">
     <Grid>
-        <ComboBox x:Name="driveCombo" HorizontalAlignment="Left" Margin="117,37,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.517,-1.544" DropDownOpened="DriveComboOpen"/>
-        <Label x:Name="driveLabel" Content="Select Flash Drive" HorizontalAlignment="Left" Margin="10,33,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="importBtn" Content="Import" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" Width="227" Click="ImportClick"/>
-        <Button x:Name="locationBtn" Content="Location" HorizontalAlignment="Left" Margin="162,10,0,0" VerticalAlignment="Top" Width="75" Click="LocationClick"/>
-        <TextBox x:Name="pathBox" HorizontalAlignment="Left" Height="23" Margin="10,9,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="147" IsEnabled="False"/>
-        <ProgressBar HorizontalAlignment="Left" Height="19" Margin="10,89,0,0" VerticalAlignment="Top" Width="227"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="14*"/>
+            <ColumnDefinition Width="25*"/>
+        </Grid.ColumnDefinitions>
+        <ComboBox x:Name="driveCombo" Margin="10,37,10,0" VerticalAlignment="Top" RenderTransformOrigin="0.517,-1.544" DropDownOpened="DriveComboOpen" Grid.Column="1" Height="22"/>
+        <Label x:Name="driveLabel" Content="Select Flash Drive" Margin="10,33,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Height="26" Width="102"/>
+        <Button x:Name="importBtn" Content="Import" Margin="10,64,10,0" VerticalAlignment="Top" Width="auto" Click="ImportClick" Grid.ColumnSpan="2" Height="20"/>
+        <Button x:Name="locationBtn" Content="Location" Margin="10,8,0,0" VerticalAlignment="Top" Click="LocationClick" Height="24" HorizontalContentAlignment="Center"/>
+        <TextBox x:Name="pathBox" Height="23" Margin="10,9,10,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" IsEnabled="False" HorizontalContentAlignment="Stretch" Grid.Column="1"/>
+        <ProgressBar Margin="10,89,10,0" VerticalAlignment="Top" Height="20" Grid.ColumnSpan="2"/>
 
     </Grid>
 </Window>
