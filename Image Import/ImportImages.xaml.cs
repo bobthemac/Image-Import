@@ -72,6 +72,7 @@ namespace Image_Import
 
         private Hashtable GetFolderNames()
         {
+            // TODO Optimize function
             Hashtable created = new Hashtable();
 
             DirectoryInfo dirInfo = new DirectoryInfo(driveCombo.Text);
@@ -99,8 +100,17 @@ namespace Image_Import
         
         private void ImportClick(object sender, RoutedEventArgs e)
         {
-            CreateFolder();
-            GetFiles();
+            //TODO check there is a valid location
+            //TODO stop UI freezing when import in progress and increment progress bar on copy
+            if (pathBox.Text != "")
+            {
+                CreateFolder();
+                GetFiles();
+            }
+            else
+            {
+                System.Windows.Forms.MessageBox.Show("You have not selected a location to import to!");
+            }
         }
 
         private void LocationClick(object sender, RoutedEventArgs e)
