@@ -52,27 +52,34 @@ namespace Image_Import
 
         }
 
-        private void CreateFolder()
+        private Hashtable GetFolderNames()
         {
             Hashtable created = new Hashtable();
 
             DirectoryInfo dirInfo = new DirectoryInfo(driveCombo.Text);
             FileInfo[] files = dirInfo.GetFiles("*.*", SearchOption.AllDirectories);
 
-            foreach(FileInfo fi in files)
+            foreach (FileInfo fi in files)
             {
                 string dateStr = fi.CreationTime.ToString("yyyy_MM_dd"); //YYYY_MM_DD
                 try
                 {
                     created.Add(dateStr, true);
-                }catch
+                }
+                catch
                 {
                     Console.WriteLine("Duplicate Catch");
                 }
             }
 
+            return created;
+        }
+
+        private void CreateFolder()
+        {
+ 
             DirectoryInfo importLocal = new DirectoryInfo(pathBox.Text);
-            foreach(DictionaryEntry h in created)
+            foreach(DictionaryEntry h in GetFolderNames())
             {
                 importLocal.CreateSubdirectory(h.Key.ToString());                
             }
