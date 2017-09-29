@@ -80,13 +80,9 @@ namespace Image_Import
             foreach (FileInfo fi in files)
             {
                 string dateStr = fi.CreationTime.ToString("yyyy_MM_dd"); //YYYY_MM_DD
-                try
+                if(!created.Contains(dateStr))
                 {
                     created.Add(dateStr, true);
-                }
-                catch
-                {
-                    Console.WriteLine("Duplicate Catch");
                 }
             }
             return created;
