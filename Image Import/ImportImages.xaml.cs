@@ -53,8 +53,6 @@ namespace Image_Import
             DirectoryInfo copyDir = new DirectoryInfo(driveCombo.Text);
             FileInfo[] copyFiles = copyDir.GetFiles("*.*", SearchOption.AllDirectories);
 
-            //FileInfo fi;
-
             foreach(FileInfo fi in copyFiles)
             {
                 string dateMatch = fi.CreationTime.ToString("yyyy_MM_dd");
@@ -64,10 +62,8 @@ namespace Image_Import
                 DirectoryInfo[] dirs = importDir.GetDirectories();
                 foreach(DirectoryInfo di in dirs)
                 {
-                    Console.WriteLine(di.Name.ToString() + " | " + dateMatch);
                     if (di.Name.ToString() == dateMatch)
                     {
-                        Console.WriteLine("Copying: " + copyPath);
                         fi.CopyTo(copyPath, false);
                     }
                 }
