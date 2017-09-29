@@ -64,7 +64,7 @@ namespace Image_Import
                 {
                     if (di.Name.ToString() == dateMatch)
                     {
-                        fi.CopyTo(copyPath, false);
+                        fi.CopyTo(copyPath, false); //TODO fix errors when trying to copy files identicaly named
                     }
                 }
             }
