@@ -54,9 +54,9 @@ namespace Image_Import
 
         private void CreateFolder()
         {
-            Hashtable created = new Hashtable();// File.GetCreatedTime
+            Hashtable created = new Hashtable();
 
-            DirectoryInfo dirInfo = new DirectoryInfo(pathBox.Text);
+            DirectoryInfo dirInfo = new DirectoryInfo(driveCombo.Text);
             FileInfo[] files = dirInfo.GetFiles("*.*", SearchOption.AllDirectories);
 
             foreach(FileInfo fi in files)
@@ -71,9 +71,10 @@ namespace Image_Import
                 }
             }
 
+            DirectoryInfo importLocal = new DirectoryInfo(pathBox.Text);
             foreach(DictionaryEntry h in created)
             {
-                Console.WriteLine("{0}", h.Key);
+                importLocal.CreateSubdirectory(h.Key.ToString());                
             }
         }
         
