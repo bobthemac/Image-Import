@@ -95,9 +95,9 @@ namespace Image_Import
             pathBox.Text = folderPath;
         }
 
-        private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void DriveComboOpen(object sender, EventArgs e)
         {
-
+            GetMediaDrive();
         }
     }
 }

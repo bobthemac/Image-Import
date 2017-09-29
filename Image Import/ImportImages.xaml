@@ -7,11 +7,11 @@
         mc:Ignorable="d"
         Title="Image Importer" Height="350" Width="525">
     <Grid>
-        <ComboBox x:Name="driveCombo" HorizontalAlignment="Left" Margin="117,37,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.517,-1.544" SelectionChanged="comboBox_SelectionChanged"/>
+        <ComboBox x:Name="driveCombo" HorizontalAlignment="Left" Margin="117,37,0,0" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.517,-1.544" DropDownOpened="DriveComboOpen"/>
         <Label x:Name="driveLabel" Content="Select Flash Drive" HorizontalAlignment="Left" Margin="10,33,0,0" VerticalAlignment="Top"/>
         <Button x:Name="importBtn" Content="Import" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" Width="227" Click="ImportClick"/>
         <Button x:Name="locationBtn" Content="Location" HorizontalAlignment="Left" Margin="162,10,0,0" VerticalAlignment="Top" Width="75" Click="LocationClick"/>
-        <TextBox x:Name="pathBox" HorizontalAlignment="Left" Height="23" Margin="10,9,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="147"/>
+        <TextBox x:Name="pathBox" HorizontalAlignment="Left" Height="23" Margin="10,9,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="147" IsEnabled="False"/>
 
     </Grid>
 </Window>
