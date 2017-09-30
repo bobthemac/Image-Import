@@ -49,6 +49,7 @@ namespace Image_Import
 
         private void GetFiles()
         {
+            // TODO stop hidden files being copied
             DirectoryInfo importDir = new DirectoryInfo(pathBox.Text);
             DirectoryInfo copyDir = new DirectoryInfo(driveCombo.Text);
             FileInfo[] copyFiles = copyDir.GetFiles("*.*", SearchOption.AllDirectories);
@@ -64,7 +65,23 @@ namespace Image_Import
                 {
                     if (di.Name.ToString() == dateMatch)
                     {
-                        fi.CopyTo(copyPath, false); //TODO fix errors when trying to copy files identicaly named
+                        try
+                        {
+                            fi.CopyTo(copyPath, false); //TODO fix errors when trying to copy files identicaly named
+                        } catch( IOException e)
+                        {
+                            
+                            DialogResult result = System.Windows.Forms.MessageBox.Show(e.Message, "Missing File", MessageBoxButtons.AbortRetryIgnore);
+                            switch(result)
+                            {
+                                case System.Windows.Forms.DialogResult.Abort:
+                                    break;
+                                case System.Windows.Forms.DialogResult.Retry:
+                                    break;
+                                case System.Windows.Forms.DialogResult.Ignore:
+                                    break;
+                            }
+                        }
                     }
                 }
             }
