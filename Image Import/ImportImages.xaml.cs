@@ -123,19 +123,33 @@ namespace Image_Import
                 importLocal.CreateSubdirectory(h.Key.ToString());                
             }
         }
+
+        private bool IsValidPath(string path)
+        {
+            FileInfo fi = null;
+            try
+            {
+                fi = new FileInfo(path);
+            }
+            catch(ArgumentException e) { System.Windows.Forms.MessageBox.Show(e.Message); }
+            catch(PathTooLongException e) { System.Windows.Forms.MessageBox.Show(e.Message); }
+            catch(NotSupportedException e) { System.Windows.Forms.MessageBox.Show(e.Message); }
+            if(ReferenceEquals(fi, null))
+            {
+                System.Windows.Forms.MessageBox.Show("The file path entered is invalid!");
+                return true;
+            }
+
+            return false;
+        }
         
         private void ImportClick(object sender, RoutedEventArgs e)
         {
-            //TODO check there is a valid location
             //TODO stop UI freezing when import in progress and increment progress bar on copy
-            if (pathBox.Text != "")
+            if (!IsValidPath(pathBox.Text))
             {
                 CreateFolder();
                 GetFiles();
-            }
-            else
-            {
-                System.Windows.Forms.MessageBox.Show("You have not selected a location to import to!");
             }
         }
 
