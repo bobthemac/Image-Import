@@ -62,7 +62,8 @@ namespace Image_Import
             DirectoryInfo copyDir = new DirectoryInfo(kDrivePath);
             FileInfo[] copyFiles = copyDir.GetFiles("*.*", SearchOption.AllDirectories);
 
-            double percentIncrementVal = copyFiles.Count() / 100;
+            int percentIncrementVal = copyFiles.Count() / 100;
+
             int progressCount = 0;
             int percentCount = 0;
 
@@ -79,7 +80,6 @@ namespace Image_Import
                     if (di.Name.ToString() == dateMatch)
                     {
                         progressCount++;
-                        Console.WriteLine(progressCount);
                         try
                         {
                             fi.CopyTo(copyPath, false);
@@ -97,7 +97,7 @@ namespace Image_Import
                             }
                         }
                     }
-                    if(progressCount >= percentIncrementVal)
+                    if(progressCount > percentIncrementVal)
                     {
                         percentCount++;
                         bWorker.ReportProgress(percentCount);
