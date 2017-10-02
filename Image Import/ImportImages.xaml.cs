@@ -25,9 +25,9 @@ namespace Image_Import
     /// </summary>
     public partial class MainWindow : Window
     {
-        BackgroundWorker bWorker;
-        string kDrivePath;
-        string kCopyToPath;
+        BackgroundWorker bWorker; // Background worker for copying files 
+        string kDrivePath; // Path of removable drive to copy from
+        string kCopyToPath; // Path to copy files to on local machine
 
         public MainWindow()
         {
