@@ -25,7 +25,6 @@ namespace Image_Import
     /// </summary>
     public partial class MainWindow : Window
     {
-        private List<DriveInfo> drives = new List<DriveInfo>();
         BackgroundWorker bWorker;
         string kDrivePath;
         string kCopyToPath;
@@ -51,10 +50,9 @@ namespace Image_Import
 
             foreach (DriveInfo drive in driveList)
             {
-                if (drive.DriveType == DriveType.Removable)
+                if (drive.DriveType == DriveType.Removable && !driveCombo.Items.Contains(drive.Name))
                 {
                     driveCombo.Items.Add(drive.Name);
-                    drives.Add(drive);
                 }
             }
             driveCombo.SelectedIndex = 0;
