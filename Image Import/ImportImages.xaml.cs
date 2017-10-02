@@ -32,12 +32,21 @@ namespace Image_Import
 
         public MainWindow()
         {
+            /*
+             * Called on start calls the standard Initialize function then calls 
+             * the get media drive function to populate the list straight away.
+             */ 
             InitializeComponent();
             GetMediaDrive();
         }
 
         private void GetMediaDrive()
         {
+            /*
+             * Gets the avalible drives that are of type removeable and adds them
+             * to an array, thn sets the display comboBox to index 0 to remove the empty 
+             * gap and move the top drive into the selected view.
+             */ 
             DriveInfo[] driveList = DriveInfo.GetDrives();
 
             foreach (DriveInfo drive in driveList)
@@ -53,11 +62,23 @@ namespace Image_Import
 
         private void bWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
+            /*
+             * Sets the value of the progress bar when the progress has changed to the
+             * value repoted by the background worker.
+             */ 
             importProgress.Value = e.ProgressPercentage;
         }
 
         private void bWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+            /*
+             * Sets the directories then gets the files and sets initial progress
+             * values. Files are lopped through one by one and a matching directory 
+             * is found then the file is copied, if the file is a duplicate the user
+             * is notified and asked if they want to overwrite the file. When a file has
+             * been copied the progressCount is incremented when it is equal to the 
+             * percentIncrementVal the percentage is increased and reported.
+             */ 
             DirectoryInfo importDir = new DirectoryInfo(kCopyToPath);
             DirectoryInfo copyDir = new DirectoryInfo(kDrivePath);
             FileInfo[] copyFiles = copyDir.GetFiles("*.*", SearchOption.AllDirectories);
@@ -112,6 +133,12 @@ namespace Image_Import
 
         private void GetFiles()
         {
+            /*
+             * Creates a new background worker for the copy task as not to
+             * lock the UI and make the program unresponsive. Sets the refences 
+             * to the background worker handlers and enables progress reporting, 
+             * then runs the worker.
+             */ 
             kDrivePath = driveCombo.Text;
             kCopyToPath = pathBox.Text;
 
@@ -126,6 +153,11 @@ namespace Image_Import
 
         private Hashtable GetFolderNames()
         {
+            /*
+             * Checks the dates of all the files on the removable drive and 
+             * creates a hashtable of unique dates that can then be used as
+             * a list to create folders in the import location.
+             */ 
             // TODO Optimize function
             Hashtable created = new Hashtable();
 
@@ -145,6 +177,10 @@ namespace Image_Import
 
         private List<FileInfo> GetNonHidden(DirectoryInfo baseDirectory)
         {
+            /*
+             * Gets all files without geting the files in hidden folders it returns a list
+             * of FileInfo objects.
+             */ 
             var file = new List<FileInfo>();
             file.AddRange(baseDirectory.GetFiles("*.*", SearchOption.TopDirectoryOnly).Where(f => (f.Attributes & FileAttributes.Hidden) == 0));
             foreach(var directory in baseDirectory.GetDirectories("*.*", SearchOption.TopDirectoryOnly).Where(f => (f.Attributes & FileAttributes.Hidden) == 0))
@@ -157,6 +193,10 @@ namespace Image_Import
 
         private void CreateFolder()
         {
+            /*
+             * Takes the path that files will be copied to and creates subdirectorys
+             * for each diffrent required folder name.
+             */
             DirectoryInfo importLocal = new DirectoryInfo(pathBox.Text);
             foreach(DictionaryEntry h in GetFolderNames())
             {
@@ -166,6 +206,12 @@ namespace Image_Import
 
         private bool IsValidPath(string path)
         {
+            /*
+             * Checks that a given path is valid and there are no other issues with the
+             * selected path. If an exception occours the user will be shown a message 
+             * explaing the issue and then finaly if the path is invalid another message 
+             * will be displayed to show that the selected path is invalid.
+             */ 
             FileInfo fi = null;
             try
             {
@@ -185,6 +231,11 @@ namespace Image_Import
         
         private void ImportClick(object sender, RoutedEventArgs e)
         {
+            /*
+             * Starts the process for importing by first checking if the path is valid
+             * and if it is then calling the functions to create the folders and start 
+             * copying.
+             */
             if (!IsValidPath(pathBox.Text))
             {
                 CreateFolder();
@@ -194,6 +245,11 @@ namespace Image_Import
 
         private void LocationClick(object sender, RoutedEventArgs e)
         {
+            /*
+             * Opens a folder browsing window to all the user to select where they want to
+             * import the files to. It then changes the text on the text box used to display 
+             * the selected path.
+             */
             string folderPath = "";
             FolderBrowserDialog dialogFolder = new FolderBrowserDialog();
 
@@ -206,6 +262,9 @@ namespace Image_Import
 
         private void DriveComboOpen(object sender, EventArgs e)
         {
+            /*
+             * Function called when the ComboBox selecting the source is cliked causing it to open 
+             */
             GetMediaDrive();
         }
     }
