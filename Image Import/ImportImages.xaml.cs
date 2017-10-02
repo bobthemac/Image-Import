@@ -67,18 +67,17 @@ namespace Image_Import
                     {
                         try
                         {
-                            fi.CopyTo(copyPath, false); //TODO fix errors when trying to copy files identicaly named
+                            fi.CopyTo(copyPath, false);
                         } catch( IOException e)
                         {
                             
-                            DialogResult result = System.Windows.Forms.MessageBox.Show(e.Message, "Missing File", MessageBoxButtons.AbortRetryIgnore);
+                            DialogResult result = System.Windows.Forms.MessageBox.Show(e.Message + " Do you want to overwrite it.", "Missing File", MessageBoxButtons.YesNo);
                             switch(result)
                             {
-                                case System.Windows.Forms.DialogResult.Abort:
+                                case System.Windows.Forms.DialogResult.Yes:
+                                    fi.CopyTo(copyPath, true);
                                     break;
-                                case System.Windows.Forms.DialogResult.Retry:
-                                    break;
-                                case System.Windows.Forms.DialogResult.Ignore:
+                                case System.Windows.Forms.DialogResult.No:
                                     break;
                             }
                         }
