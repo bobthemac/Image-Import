@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using System.IO;
 using System.Windows.Forms;
 using System.Collections;
+using System.ComponentModel;
 
 namespace Image_Import
 {
@@ -25,7 +26,10 @@ namespace Image_Import
     public partial class MainWindow : Window
     {
         private List<DriveInfo> drives = new List<DriveInfo>();
-   
+        BackgroundWorker bWorker;
+        string kDrivePath;
+        string kCopyToPath;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -47,30 +51,43 @@ namespace Image_Import
             driveCombo.SelectedIndex = 0;
         }
 
-        private void GetFiles()
+        private void bWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            DirectoryInfo importDir = new DirectoryInfo(pathBox.Text);
-            DirectoryInfo copyDir = new DirectoryInfo(driveCombo.Text);
+            importProgress.Value = e.ProgressPercentage;
+        }
+
+        private void bWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            DirectoryInfo importDir = new DirectoryInfo(kCopyToPath);
+            DirectoryInfo copyDir = new DirectoryInfo(kDrivePath);
             FileInfo[] copyFiles = copyDir.GetFiles("*.*", SearchOption.AllDirectories);
 
-            foreach(FileInfo fi in copyFiles)
+            double percentIncrementVal = copyFiles.Count() / 100;
+            int progressCount = 0;
+            int percentCount = 0;
+
+            bWorker.ReportProgress(percentCount);
+
+            foreach (FileInfo fi in copyFiles)
             {
                 string dateMatch = fi.CreationTime.ToString("yyyy_MM_dd");
-
-                string copyPath = System.IO.Path.Combine(pathBox.Text, dateMatch, fi.Name.ToString());
+                string copyPath = System.IO.Path.Combine(kCopyToPath, dateMatch, fi.Name.ToString());
 
                 DirectoryInfo[] dirs = importDir.GetDirectories();
-                foreach(DirectoryInfo di in dirs)
+                foreach (DirectoryInfo di in dirs)
                 {
                     if (di.Name.ToString() == dateMatch)
                     {
+                        progressCount++;
+                        Console.WriteLine(progressCount);
                         try
                         {
                             fi.CopyTo(copyPath, false);
-                        } catch( IOException e)
+                        }
+                        catch (IOException ex)
                         {
-                            DialogResult result = System.Windows.Forms.MessageBox.Show(e.Message + " Do you want to overwrite it.", "Missing File", MessageBoxButtons.YesNo);
-                            switch(result)
+                            DialogResult result = System.Windows.Forms.MessageBox.Show(ex.Message + " Do you want to overwrite it.", "Missing File", MessageBoxButtons.YesNo);
+                            switch (result)
                             {
                                 case System.Windows.Forms.DialogResult.Yes:
                                     fi.CopyTo(copyPath, true);
@@ -80,8 +97,31 @@ namespace Image_Import
                             }
                         }
                     }
+                    if(progressCount >= percentIncrementVal)
+                    {
+                        percentCount++;
+                        bWorker.ReportProgress(percentCount);
+                        progressCount = 0;
+                    }
+
                 }
             }
+
+            bWorker.ReportProgress(100);
+        }
+
+        private void GetFiles()
+        {
+            kDrivePath = driveCombo.Text;
+            kCopyToPath = pathBox.Text;
+
+            bWorker = new BackgroundWorker();
+
+            bWorker.DoWork += new DoWorkEventHandler(bWorker_DoWork);
+            bWorker.ProgressChanged += new ProgressChangedEventHandler(bWorker_ProgressChanged);
+            bWorker.WorkerReportsProgress = true;
+
+            bWorker.RunWorkerAsync();
         }
 
         private Hashtable GetFolderNames()

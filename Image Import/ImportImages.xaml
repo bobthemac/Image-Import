@@ -16,7 +16,7 @@
         <Button x:Name="importBtn" Content="Import" Margin="10,64,10,0" VerticalAlignment="Top" Width="auto" Click="ImportClick" Grid.ColumnSpan="2" Height="20"/>
         <Button x:Name="locationBtn" Content="Location" Margin="10,8,0,0" VerticalAlignment="Top" Click="LocationClick" Height="24" HorizontalContentAlignment="Center"/>
         <TextBox x:Name="pathBox" Height="23" Margin="10,9,10,0" TextWrapping="Wrap" VerticalAlignment="Top" IsEnabled="False" HorizontalContentAlignment="Stretch" Grid.Column="1" SelectionOpacity="0"/>
-        <ProgressBar Margin="10,89,10,0" VerticalAlignment="Top" Height="20" Grid.ColumnSpan="2"/>
+        <ProgressBar x:Name="importProgress" Margin="10,89,10,0" VerticalAlignment="Top" Height="20" Grid.ColumnSpan="2"/>
 
     </Grid>
 </Window>
