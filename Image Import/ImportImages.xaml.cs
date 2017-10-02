@@ -49,7 +49,6 @@ namespace Image_Import
 
         private void GetFiles()
         {
-            // TODO stop hidden files being copied
             DirectoryInfo importDir = new DirectoryInfo(pathBox.Text);
             DirectoryInfo copyDir = new DirectoryInfo(driveCombo.Text);
             FileInfo[] copyFiles = copyDir.GetFiles("*.*", SearchOption.AllDirectories);
