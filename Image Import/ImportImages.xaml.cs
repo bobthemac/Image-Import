@@ -37,6 +37,7 @@ namespace Image_Import
              */ 
             InitializeComponent();
             GetMediaDrive();
+            kDrivePath = driveCombo.Text;
         }
 
         private void GetMediaDrive()
@@ -137,9 +138,6 @@ namespace Image_Import
              * to the background worker handlers and enables progress reporting, 
              * then runs the worker.
              */ 
-            kDrivePath = driveCombo.Text;
-            kCopyToPath = pathBox.Text;
-
             bWorker = new BackgroundWorker();
 
             bWorker.DoWork += new DoWorkEventHandler(bWorker_DoWork);
@@ -159,7 +157,7 @@ namespace Image_Import
             // TODO Optimize function
             Hashtable created = new Hashtable();
 
-            DirectoryInfo dirInfo = new DirectoryInfo(driveCombo.Text);
+            DirectoryInfo dirInfo = new DirectoryInfo(kDrivePath);
             FileInfo[] files = GetNonHidden(dirInfo).ToArray();
 
             foreach (FileInfo fi in files)
@@ -195,7 +193,7 @@ namespace Image_Import
              * Takes the path that files will be copied to and creates subdirectorys
              * for each diffrent required folder name.
              */
-            DirectoryInfo importLocal = new DirectoryInfo(pathBox.Text);
+            DirectoryInfo importLocal = new DirectoryInfo(kCopyToPath);
             foreach(DictionaryEntry h in GetFolderNames())
             {
                 importLocal.CreateSubdirectory(h.Key.ToString());                
@@ -255,7 +253,8 @@ namespace Image_Import
             {
                 folderPath = dialogFolder.SelectedPath;
             }
-            pathBox.Text = folderPath;
+            kCopyToPath = folderPath;
+            pathBox.Text = kCopyToPath;
         }
 
         private void DriveComboOpen(object sender, EventArgs e)
