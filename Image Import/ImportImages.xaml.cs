@@ -70,7 +70,6 @@ namespace Image_Import
                             fi.CopyTo(copyPath, false);
                         } catch( IOException e)
                         {
-                            
                             DialogResult result = System.Windows.Forms.MessageBox.Show(e.Message + " Do you want to overwrite it.", "Missing File", MessageBoxButtons.YesNo);
                             switch(result)
                             {
@@ -92,7 +91,7 @@ namespace Image_Import
             Hashtable created = new Hashtable();
 
             DirectoryInfo dirInfo = new DirectoryInfo(driveCombo.Text);
-            FileInfo[] files = dirInfo.GetFiles("*.*", SearchOption.AllDirectories);
+            FileInfo[] files = GetNonHidden(dirInfo).ToArray();
 
             foreach (FileInfo fi in files)
             {
@@ -103,6 +102,18 @@ namespace Image_Import
                 }
             }
             return created;
+        }
+
+        private List<FileInfo> GetNonHidden(DirectoryInfo baseDirectory)
+        {
+            var file = new List<FileInfo>();
+            file.AddRange(baseDirectory.GetFiles("*.*", SearchOption.TopDirectoryOnly).Where(f => (f.Attributes & FileAttributes.Hidden) == 0));
+            foreach(var directory in baseDirectory.GetDirectories("*.*", SearchOption.TopDirectoryOnly).Where(f => (f.Attributes & FileAttributes.Hidden) == 0))
+            {
+                file.AddRange(GetNonHidden(directory));
+            }
+
+            return file; 
         }
 
         private void CreateFolder()
