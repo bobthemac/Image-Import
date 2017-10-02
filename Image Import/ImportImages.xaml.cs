@@ -51,11 +51,13 @@ namespace Image_Import
 
             foreach (DriveInfo drive in driveList)
             {
+                // Check if a drive is removeable and it dosent already exist
                 if (drive.DriveType == DriveType.Removable && !driveCombo.Items.Contains(drive.Name))
                 {
                     driveCombo.Items.Add(drive.Name);
                 }
             }
+            // Set index to remove top empty slot 
             driveCombo.SelectedIndex = 0;
         }
 
@@ -82,8 +84,8 @@ namespace Image_Import
             DirectoryInfo copyDir = new DirectoryInfo(kDrivePath);
             FileInfo[] copyFiles = copyDir.GetFiles("*.*", SearchOption.AllDirectories);
 
+            // Set percentage variables for progress bar
             int percentIncrementVal = copyFiles.Count() / 100;
-
             int progressCount = 0;
             int percentCount = 0;
 
@@ -91,8 +93,8 @@ namespace Image_Import
 
             foreach (FileInfo fi in copyFiles)
             {
-                string dateMatch = fi.CreationTime.ToString("yyyy_MM_dd");
-                string copyPath = System.IO.Path.Combine(kCopyToPath, dateMatch, fi.Name.ToString());
+                string dateMatch = fi.CreationTime.ToString("yyyy_MM_dd"); // Gets date of the file to match with folder
+                string copyPath = System.IO.Path.Combine(kCopyToPath, dateMatch, fi.Name.ToString()); // Create path to copy file to
 
                 DirectoryInfo[] dirs = importDir.GetDirectories();
                 foreach (DirectoryInfo di in dirs)
@@ -102,10 +104,12 @@ namespace Image_Import
                         progressCount++;
                         try
                         {
+                            // Copy file without overwrite
                             fi.CopyTo(copyPath, false);
                         }
                         catch (IOException ex)
                         {
+                            // Overite file dialog then copy overwrite or ignore
                             DialogResult result = System.Windows.Forms.MessageBox.Show(ex.Message + " Do you want to overwrite it.", "Missing File", MessageBoxButtons.YesNo);
                             switch (result)
                             {
@@ -120,6 +124,8 @@ namespace Image_Import
                     if(progressCount > percentIncrementVal)
                     {
                         percentCount++;
+
+                        // Report the current percentage for display
                         bWorker.ReportProgress(percentCount);
                         progressCount = 0;
                     }
@@ -127,6 +133,7 @@ namespace Image_Import
                 }
             }
 
+            // Task finished progress full
             bWorker.ReportProgress(100);
         }
 
@@ -140,10 +147,12 @@ namespace Image_Import
              */ 
             bWorker = new BackgroundWorker();
 
+            // Setup functions and settings for background worker
             bWorker.DoWork += new DoWorkEventHandler(bWorker_DoWork);
             bWorker.ProgressChanged += new ProgressChangedEventHandler(bWorker_ProgressChanged);
             bWorker.WorkerReportsProgress = true;
 
+            // Run the worker in the background
             bWorker.RunWorkerAsync();
         }
 
@@ -154,20 +163,26 @@ namespace Image_Import
              * creates a hashtable of unique dates that can then be used as
              * a list to create folders in the import location.
              */ 
+
             // TODO Optimize function
             Hashtable created = new Hashtable();
 
+            // Scan directory and get all files and convert to array
             DirectoryInfo dirInfo = new DirectoryInfo(kDrivePath);
             FileInfo[] files = GetNonHidden(dirInfo).ToArray();
 
             foreach (FileInfo fi in files)
             {
-                string dateStr = fi.CreationTime.ToString("yyyy_MM_dd"); //YYYY_MM_DD
-                if(!created.Contains(dateStr))
+                string dateStr = fi.CreationTime.ToString("yyyy_MM_dd"); // Date format for folder creation YYYY_MM_DD
+
+                // Check if date already exists and if not add to hashtable
+                if (!created.Contains(dateStr))
                 {
                     created.Add(dateStr, true);
                 }
             }
+
+            // Return hash table of unique dates
             return created;
         }
 
@@ -176,14 +191,15 @@ namespace Image_Import
             /*
              * Gets all files without geting the files in hidden folders it returns a list
              * of FileInfo objects.
-             */ 
+             */
             var file = new List<FileInfo>();
+
+            // Add directories that are viewable and not hidden with recursion to find all levels
             file.AddRange(baseDirectory.GetFiles("*.*", SearchOption.TopDirectoryOnly).Where(f => (f.Attributes & FileAttributes.Hidden) == 0));
             foreach(var directory in baseDirectory.GetDirectories("*.*", SearchOption.TopDirectoryOnly).Where(f => (f.Attributes & FileAttributes.Hidden) == 0))
             {
                 file.AddRange(GetNonHidden(directory));
             }
-
             return file; 
         }
 
@@ -196,6 +212,7 @@ namespace Image_Import
             DirectoryInfo importLocal = new DirectoryInfo(kCopyToPath);
             foreach(DictionaryEntry h in GetFolderNames())
             {
+                // Create sub directory with name from list
                 importLocal.CreateSubdirectory(h.Key.ToString());                
             }
         }
@@ -209,6 +226,7 @@ namespace Image_Import
              * will be displayed to show that the selected path is invalid.
              */ 
             FileInfo fi = null;
+
             try
             {
                 fi = new FileInfo(path);
@@ -216,13 +234,14 @@ namespace Image_Import
             catch(ArgumentException e) { System.Windows.Forms.MessageBox.Show(e.Message); }
             catch(PathTooLongException e) { System.Windows.Forms.MessageBox.Show(e.Message); }
             catch(NotSupportedException e) { System.Windows.Forms.MessageBox.Show(e.Message); }
+
+            // Check if path is valid
             if(ReferenceEquals(fi, null))
             {
                 System.Windows.Forms.MessageBox.Show("The file path entered is invalid!");
-                return true;
+                return true; // Path not valid return true
             }
-
-            return false;
+            return false; // Path valid return false
         }
         
         private void ImportClick(object sender, RoutedEventArgs e)
@@ -232,7 +251,9 @@ namespace Image_Import
              * and if it is then calling the functions to create the folders and start 
              * copying.
              */
-            if (!IsValidPath(pathBox.Text))
+
+            // Check that the path is valid then create folders and copy files
+            if (!IsValidPath(kCopyToPath))
             {
                 CreateFolder();
                 GetFiles();
@@ -246,14 +267,17 @@ namespace Image_Import
              * import the files to. It then changes the text on the text box used to display 
              * the selected path.
              */
-            string folderPath = "";
+             
+            // Open a folder browse dialog to select path
             FolderBrowserDialog dialogFolder = new FolderBrowserDialog();
 
+            // When path is successfully chosen set path
             if (dialogFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                folderPath = dialogFolder.SelectedPath;
+                kCopyToPath = dialogFolder.SelectedPath;
             }
-            kCopyToPath = folderPath;
+
+            // Set path box global variable
             pathBox.Text = kCopyToPath;
         }
 
