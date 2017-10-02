@@ -185,7 +185,6 @@ namespace Image_Import
         
         private void ImportClick(object sender, RoutedEventArgs e)
         {
-            //TODO stop UI freezing when import in progress and increment progress bar on copy
             if (!IsValidPath(pathBox.Text))
             {
                 CreateFolder();
