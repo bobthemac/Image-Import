@@ -288,5 +288,13 @@ namespace Image_Import
              */
             GetMediaDrive();
         }
+
+        private void driveCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            /*
+             * Function called when drive selected sets device to copy from. 
+             */
+            kDrivePath = driveCombo.SelectedValue.ToString();
+        }
     }
 }
